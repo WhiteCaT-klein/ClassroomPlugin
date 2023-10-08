@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "classroomplugin.helloWorld",
-        "title": "Hello World"
+        "command": "git_plugin.run",
+        "title": "Compile and Commit C code"
       }
     ]
   },
