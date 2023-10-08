@@ -1,71 +1,66 @@
 # classroomplugin README
 
-This is the README for your extension "classroomplugin". After writing up a brief description, we recommend including the following sections.
+## Overview
+
+The Git Plugin for Visual Studio Code is an extension that provides seamless integration with Git, allowing you to compile and run C programs, capture compilation errors, and interact with the Git version control system directly from within Visual Studio Code.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Compile and run C programs with a single click.
+- Capture and display compilation errors in real-time.
+- Interact with the Git version control system to stage, commit, and push changes.
+- Log the debugging session for C programs using GDB.
 
-For example if there is an image subfolder under your extension project workspace:
+## Prerequisites
 
-\!\[feature X\]\(images/feature-x.png\)
+Before using this extension, ensure that you have the following software installed on your system:
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- Visual Studio Code: [Download VS Code](https://code.visualstudio.com/download)
+- Node.js and npm: [Download Node.js](https://nodejs.org/)
+- Git: [Download Git](https://git-scm.com/downloads)
+- GCC (GNU Compiler Collection) for C programming: [Download GCC](https://gcc.gnu.org/install/index.html)
 
-## Requirements
+## Installation
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+1. Open Visual Studio Code.
+2. Go to the Extensions view by clicking on the Extensions icon in the Activity Bar on the side of the window.
+3. Search for "Git Plugin" in the Extensions view search box.
+4. Click the Install button to install the extension.
+5. After installation, click the Reload button to activate the extension.
 
-## Extension Settings
+## Usage
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+### Compiling and Running C Programs
 
-For example:
+1. Open a C program file (`.c`) in Visual Studio Code.
+2. Click on the "Git Plugin" icon in the Activity Bar on the side of the window or use the provided keyboard shortcut.
+3. The extension will compile the C program using GCC and run it in the terminal.
+4. Compilation errors, if any, will be displayed in real-time.
 
-This extension contributes the following settings:
+### Git Integration
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+1. Ensure that you have a Git repository initialized in your project directory.
+2. Use the "Git Plugin" commands from the command palette to stage, commit, and push your changes.
 
-## Known Issues
+### Debugging C Programs (GDB)
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+1. After compiling and running a C program, you can start a debugging session.
+2. The extension will log the debugging session to a file for analysis.
 
-## Release Notes
+## Configuration
 
-Users appreciate release notes as you update your extension.
+You can configure some aspects of this extension by modifying the settings in your Visual Studio Code settings.json file. Here are the available settings:
 
-### 1.0.0
+- `"git_plugin.compileCommand"`: Customize the compilation command (default: `"gcc -g {file} -o {output}"`).
+- `"git_plugin.runCommand"`: Customize the run command (default: `"{output}"`).
+- `"git_plugin.gitAddCommand"`: Customize the Git add command (default: `"git add ."`).
+- `"git_plugin.gitCommitCommand"`: Customize the Git commit command (default: `"git commit -m {message}"`).
+- `"git_plugin.gitPushCommand"`: Customize the Git push command (default: `"git push"`).
 
-Initial release of ...
+## Troubleshooting
 
-### 1.0.1
+If you encounter any issues or have questions, please visit the [GitHub repository](https://github.com/WhiteCaT-klein/ClassroomPlugin) for this extension to submit an issue or seek assistance.
 
-Fixed issue #.
+## License
 
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+This extension is licensed under the [MIT License](LICENSE).
