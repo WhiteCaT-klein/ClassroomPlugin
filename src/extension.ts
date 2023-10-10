@@ -22,21 +22,24 @@ export function activate(context: vscode.ExtensionContext) {
 
                 // Execute the compile command directly in the terminal
                 terminal.sendText(compileCommand, true);
+                const baseFileName = path.basename(filePath, '.c'); // Get the base filename without the extension
 
-                const compileErrorsFilePath = path.join(path.dirname(filePath), 'compile_errors.txt');
-                const debugLogFilePath = path.join(path.dirname(filePath), 'debug_log.txt');
+                const compileErrorsFilePath = path.join(path.dirname(filePath), `${baseFileName}_compile_errors.txt`);
+                const debugLogFilePath = path.join(path.dirname(filePath), `${baseFileName}_debug_log.txt`);
+
 
                 // Create a log file to store compilation errors
                 const logStream = fs.createWriteStream(compileErrorsFilePath, { flags: 'a' });
                 const debugLogStream = fs.createWriteStream(debugLogFilePath, { flags: 'a' });
                 // Add timestamp with date and time to the log file
                 const timestamp = new Date().toLocaleString();
-                logStream.write(`\n\nCompilation Errors - ${timestamp}\n\n`);
+               
 
                 // Execute the compile command using child_process
                 const compileProcess = child_process.exec(compileCommand, (error, stdout, stderr) => {
                     if (error) {
                         vscode.window.showErrorMessage('Compilation failed. See compile_errors.txt for details.');
+                        logStream.write(`\n\nCompilation Errors - ${timestamp}\n\n`);
                         logStream.write(`Compilation failed: ${error.message}\n`);
                     } else {
                         // Compilation successful, run the program
@@ -54,38 +57,35 @@ export function activate(context: vscode.ExtensionContext) {
                     logStream.end(); // Close the log file
                     if (code === 0) {
                         vscode.window.showInformationMessage('Compilation succeeded.');
-
-                        // Set up GDB commands and logging
                         setTimeout(() => {
-                            debugLogStream.write('\n\n  ');
-                            const gdbCommand = `gdb ${outputFilePath}`;
-                            const dummyCommand = 'x';
-                            const scriptCommand = 'set logging file debug_log.txt';
-                            const logOnCommand = 'set logging on';
-                            const breakCommand = 'b main';
-                            const runCommand = 'run';
-                            const continueCommand = 'c';
-                            const logOffCommand = 'set logging off';
-                            const quitCommand = 'quit';
-    
-                            terminal.sendText(gdbCommand);
+                        debugLogStream.write('\n\n  ');
+                        const gdbCommand = `gdb ${outputFilePath}`;
+                        const dummyCommand = 'x';
+                        const scriptCommand = `set logging file ${baseFileName}_debug_log.txt`;
+                        const logOnCommand = 'set logging on';
+                        const breakCommand = 'b main';
+                        const runCommand = 'run';
+                        const continueCommand = 'c';
+                        const logOffCommand = 'set logging off';
+                        const quitCommand = 'quit';
+
+                        terminal.sendText(gdbCommand);
+                        setTimeout(() => {
+                            terminal.sendText(dummyCommand);
                             setTimeout(() => {
-                                terminal.sendText(dummyCommand);
+                                terminal.sendText(scriptCommand);
                                 setTimeout(() => {
-                                    terminal.sendText(scriptCommand);
+                                    terminal.sendText(logOnCommand);
                                     setTimeout(() => {
-                                        terminal.sendText(logOnCommand);
+                                        terminal.sendText(breakCommand);
                                         setTimeout(() => {
-                                            terminal.sendText(breakCommand);
+                                            terminal.sendText(runCommand);
                                             setTimeout(() => {
-                                                terminal.sendText(runCommand);
+                                                terminal.sendText(continueCommand);
                                                 setTimeout(() => {
-                                                    terminal.sendText(continueCommand);
+                                                    terminal.sendText(logOffCommand);
                                                     setTimeout(() => {
-                                                        terminal.sendText(logOffCommand);
-                                                        setTimeout(() => {
-                                                            terminal.sendText(quitCommand);
-                                                        }, 500);
+                                                        terminal.sendText(quitCommand);
                                                     }, 500);
                                                 }, 500);
                                             }, 500);
@@ -93,18 +93,19 @@ export function activate(context: vscode.ExtensionContext) {
                                     }, 500);
                                 }, 500);
                             }, 500);
-                        }, 1000);
-
-                        // Add Git commands
+                        }, 500);
+                    }, 1000);
                         
                     }
+                    
                 });
+
                 setTimeout(() => {
                     terminal.sendText('git add .');
                     const commitMessage = `committed ${new Date().toLocaleString()}`;
                     terminal.sendText(`git commit -m "${commitMessage}"`);
                     terminal.sendText('git push');
-                }, 5000);
+                }, 7000);
             
             } else {
                 vscode.window.showErrorMessage('The active document is not a C program.');
