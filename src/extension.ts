@@ -58,34 +58,51 @@ export function activate(context: vscode.ExtensionContext) {
                     if (code === 0) {
                         vscode.window.showInformationMessage('Compilation succeeded.');
                         setTimeout(() => {
-                        debugLogStream.write('\n\n  ');
-                        const gdbCommand = `gdb ${outputFilePath}`;
-                        const dummyCommand = 'x';
-                        const scriptCommand = `set logging file ${baseFileName}_debug_log.txt`;
-                        const logOnCommand = 'set logging on';
-                        const breakCommand = 'b main';
-                        const runCommand = 'run';
-                        const continueCommand = 'c';
-                        const logOffCommand = 'set logging off';
-                        const quitCommand = 'quit';
+                            debugLogStream.write(`\n\nGDB debug log -   ${timestamp}\n\n  `);
+                            const gdbCommand = `gdb "${outputFilePath}"`;
+                            const dummyCommand = 'x';
+                            const scriptCommand = `set logging file ${baseFileName}_debug_log.txt`;
+                            const logOnCommand = 'set logging enabled on';
+                            const breakCommand = 'b main';
+                            const runCommand = 'run';
+                            const nextCommand = 'n';
+                            const stepCommand = 's';
+                            const printCommand = 'p'; // You might want to add a variable name here
+                            const continueCommand = 'c';
+                            const listCommand = 'l';
+                            const logOffCommand = 'set logging enabled off';
+                            const quitCommand = 'quit';
 
-                        terminal.sendText(gdbCommand);
-                        setTimeout(() => {
-                            terminal.sendText(dummyCommand);
+                            terminal.sendText(gdbCommand);
                             setTimeout(() => {
-                                terminal.sendText(scriptCommand);
+                                terminal.sendText(dummyCommand);
                                 setTimeout(() => {
-                                    terminal.sendText(logOnCommand);
+                                    terminal.sendText(scriptCommand);
                                     setTimeout(() => {
-                                        terminal.sendText(breakCommand);
+                                        terminal.sendText(logOnCommand);
                                         setTimeout(() => {
-                                            terminal.sendText(runCommand);
+                                            terminal.sendText(breakCommand);
                                             setTimeout(() => {
-                                                terminal.sendText(continueCommand);
+                                                terminal.sendText(runCommand);
                                                 setTimeout(() => {
-                                                    terminal.sendText(logOffCommand);
+                                                    terminal.sendText(nextCommand);
                                                     setTimeout(() => {
-                                                        terminal.sendText(quitCommand);
+                                                        terminal.sendText(stepCommand);
+                                                        setTimeout(() => {
+                                                            terminal.sendText(printCommand); // You might want to add a variable name here
+                                                            setTimeout(() => {
+                                                                terminal.sendText(continueCommand);
+                                                                setTimeout(() => {
+                                                                    terminal.sendText(listCommand);
+                                                                    setTimeout(() => {
+                                                                        terminal.sendText(logOffCommand);
+                                                                        setTimeout(() => {
+                                                                            terminal.sendText(quitCommand);
+                                                                        }, 500);
+                                                                    }, 500);
+                                                                }, 500);
+                                                            }, 500);
+                                                        }, 500);
                                                     }, 500);
                                                 }, 500);
                                             }, 500);
@@ -93,7 +110,6 @@ export function activate(context: vscode.ExtensionContext) {
                                     }, 500);
                                 }, 500);
                             }, 500);
-                        }, 500);
                     }, 1000);
                         
                     }
@@ -105,7 +121,7 @@ export function activate(context: vscode.ExtensionContext) {
                     const commitMessage = `committed ${new Date().toLocaleString()}`;
                     terminal.sendText(`git commit -m "${commitMessage}"`);
                     terminal.sendText('git push');
-                }, 7000);
+                }, 10000);
             
             } else {
                 vscode.window.showErrorMessage('The active document is not a C program.');

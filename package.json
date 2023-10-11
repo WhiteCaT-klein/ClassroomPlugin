@@ -2,7 +2,8 @@
   "name": "classroomplugin",
   "displayName": "ClassroomPlugin",
   "description": "",
-  "version": "0.0.1",
+  "version": "1.0.1",
+  "publisher": "WhiteCaT-klein",
   "repository": {
     "type": "git",
     "url": "https://github.com/WhiteCaT-klein/ClassroomPlugin.git"
